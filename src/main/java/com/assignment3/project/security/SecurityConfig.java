@@ -58,7 +58,7 @@ public class SecurityConfig {
                             public String resolve(HttpServletRequest request) {
                                 String path = request.getRequestURI();
                                 String method = request.getMethod();
-                                
+
                                 if ("GET".equals(method) && (
                                     path.equals("/api/v1/projects") || path.startsWith("/api/v1/projects/") ||
                                     path.equals("/api/v1/events") || path.startsWith("/api/v1/events/") ||
@@ -77,7 +77,7 @@ public class SecurityConfig {
                                     }
                                     return null;
                                 }
-                                
+
                                 String authHeader = request.getHeader("Authorization");
                                 if (authHeader != null && authHeader.startsWith("Bearer ") && authHeader.length() > 7) {
                                     return authHeader.substring(7);
@@ -90,7 +90,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint((request, response, authException) -> {
                             String path = request.getRequestURI();
                             String method = request.getMethod();
-                            
+
                             if ("GET".equals(method) && (
                                 path.equals("/api/v1/projects") || path.startsWith("/api/v1/projects/") ||
                                 path.equals("/api/v1/events") || path.startsWith("/api/v1/events/") ||
@@ -103,7 +103,7 @@ public class SecurityConfig {
                                 response.setStatus(HttpServletResponse.SC_OK);
                                 return;
                             }
-                            
+
                             new BearerTokenAuthenticationEntryPoint().commence(request, response, authException);
                         })
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
@@ -137,18 +137,20 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Разрешаем запросы с локального окружения и Netlify
         configuration.setAllowedOrigins(List.of(
-            "http://localhost:5173",
-            "https://assignment3-vue.netlify.app"
+                "http://localhost:5173",
+                "http://localhost:3000",
+                "https://azharfund.netlify.app"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
