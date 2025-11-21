@@ -125,11 +125,22 @@ public class ProjectService {
         if (projectToUpdate.getTargetAmount() != null) {
             project.setTargetAmount(projectToUpdate.getTargetAmount());
         }
-        
+
         if (projectToUpdate.getImageIds() != null) {
-            var images = new HashSet<>(imageRepository.findAllById(projectToUpdate.getImageIds()));
-            images.forEach(img -> img.setProject(project));
-            project.setImages(images);
+            var newImages = new HashSet<>(imageRepository.findAllById(projectToUpdate.getImageIds()));
+            var oldImages = new HashSet<>(project.getImages());
+
+            for (var oldImg : oldImages) {
+                if (!projectToUpdate.getImageIds().contains(oldImg.getId())) {
+                    imageRepository.delete(oldImg);
+                }
+            }
+
+            for (var img : newImages) {
+                img.setProject(project);
+            }
+
+            project.setImages(newImages);
         }
         
         return projectMapper.toDto(projectRepository.save(project));
