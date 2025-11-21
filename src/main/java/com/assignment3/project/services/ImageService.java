@@ -26,8 +26,9 @@ public class ImageService {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("File is required");
         }
-        String folderName = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        String folderName = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String relativePath = fileStorageService.saveProjectImage(folderName, file);
+        relativePath = relativePath.replace("/app/", "");  // ← ФИКС!
         var project = projectRepository.findById(projectId).orElseThrow();
         Image image = Image.builder()
                 .relativePath(relativePath)
