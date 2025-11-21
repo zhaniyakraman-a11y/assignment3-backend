@@ -49,9 +49,16 @@ buildNumber.properties
 Thumbs.db
 
 # Application specific
-images/
-avatars/
-docs/
+# Ignore content but not folder
+images/*
+avatars/*
+docs/*
+
+# Allow keeping folder
+!images/.gitkeep
+!avatars/.gitkeep
+!docs/.gitkeep
+
 *.db
 *.sqlite
 
