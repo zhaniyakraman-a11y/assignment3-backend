@@ -18,7 +18,7 @@ public class WebConfig {
                         .allowedOrigins(
                                 "http://localhost:5173",
                                 "http://localhost:3000",
-                                "https://azharfund.netlify.app"
+                                "https://azharfund.netlify.app",
                                 "https://assignment3-backend-zjoo.onrender.com"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
